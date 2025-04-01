@@ -125,6 +125,8 @@ const Programs = () => {
       navigate('/law-program');
     } else if (program.name === "Bachelor of Science in Applied Computer Science") {
       navigate('/computer-science');
+    } else if (program.name === "Bachelor of Science in Environmental Health") {
+      navigate('/environmental-health');
     } else {
       setModalProgram(program);
     }

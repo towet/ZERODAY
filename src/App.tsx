@@ -8,6 +8,7 @@ import { useInView } from 'react-intersection-observer';
 import Programs from './components/Programs';
 import LawProgram from './components/LawProgram';
 import ComputerScience from './components/ComputerScience';
+import EnvironmentalHealth from './components/EnvironmentalHealth';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -443,6 +444,7 @@ function App() {
           <Route path="/programs" element={<Programs />} />
           <Route path="/law-program" element={<LawProgram />} />
           <Route path="/computer-science" element={<ComputerScience />} />
+          <Route path="/environmental-health" element={<EnvironmentalHealth />} />
         </Routes>
       </div>
     </Router>
