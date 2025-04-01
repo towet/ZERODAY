@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, ChevronRight, BookOpen, X } from 'lucide-react';
+import { Search, ChevronRight, BookOpen, X, GraduationCap, Users, Clock } from 'lucide-react';
 
 interface Program {
   level: string;
@@ -105,6 +105,7 @@ const Programs = () => {
   const [selectedLevel, setSelectedLevel] = useState('All');
   const [selectedFaculty, setSelectedFaculty] = useState('All');
   const [modalProgram, setModalProgram] = useState<Program | null>(null);
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
 
   const levels = ['All', ...Array.from(new Set(programs.map(p => p.level)))];
   const faculties = ['All', ...Array.from(new Set(programs.map(p => p.faculty)))];
@@ -118,102 +119,154 @@ const Programs = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      {/* Header */}
-      <div className="max-w-7xl mx-auto text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Our Programs</h1>
-        <p className="text-xl text-gray-600">Discover your path to excellence with our diverse range of academic programs</p>
-      </div>
-
-      {/* Filters */}
-      <div className="max-w-7xl mx-auto mb-8 space-y-4 md:space-y-0 md:flex md:items-center md:justify-between">
-        <div className="relative flex-1 max-w-lg">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-5 w-5 text-gray-400" />
-          </div>
-          <input
-            type="text"
-            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 sm:text-sm"
-            placeholder="Search programs..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <div className="flex space-x-4">
-          <select
-            className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-600 focus:border-blue-600 sm:text-sm rounded-md"
-            value={selectedLevel}
-            onChange={(e) => setSelectedLevel(e.target.value)}
-          >
-            {levels.map(level => (
-              <option key={level} value={level}>{level}</option>
-            ))}
-          </select>
-          <select
-            className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-600 focus:border-blue-600 sm:text-sm rounded-md"
-            value={selectedFaculty}
-            onChange={(e) => setSelectedFaculty(e.target.value)}
-          >
-            {faculties.map(faculty => (
-              <option key={faculty} value={faculty}>{faculty}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      {/* Programs Grid */}
-      <div className="max-w-7xl mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredPrograms.map((program, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-          >
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                  {program.level}
-                </span>
-                <span className="text-sm text-gray-500">{program.faculty}</span>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <div className="relative h-[300px] md:h-[400px] bg-cover bg-center" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1920&q=80)' }}>
+        <div className="absolute inset-0 bg-black bg-opacity-60" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center text-white px-4">
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6">Academic Programs</h1>
+            <p className="text-lg md:text-xl mb-6 md:mb-8 max-w-2xl mx-auto">
+              Discover your path to excellence with our comprehensive range of academic programs designed to shape future leaders
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
+              <div className="stats bg-white/10 backdrop-blur-lg p-3 md:p-4 rounded-lg w-full sm:w-auto">
+                <div className="flex items-center gap-2">
+                  <GraduationCap className="w-5 h-5" />
+                  <span className="text-sm md:text-base">{programs.length}+ Programs</span>
+                </div>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">{program.name}</h3>
-              <button
-                onClick={() => setModalProgram(program)}
-                className="inline-flex items-center text-blue-600 hover:text-blue-800"
-              >
-                View Details <ChevronRight className="h-4 w-4 ml-1" />
-              </button>
+              <div className="stats bg-white/10 backdrop-blur-lg p-3 md:p-4 rounded-lg w-full sm:w-auto">
+                <div className="flex items-center gap-2">
+                  <Users className="w-5 h-5" />
+                  <span className="text-sm md:text-base">Expert Faculty</span>
+                </div>
+              </div>
+              <div className="stats bg-white/10 backdrop-blur-lg p-3 md:p-4 rounded-lg w-full sm:w-auto">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-5 h-5" />
+                  <span className="text-sm md:text-base">Flexible Schedule</span>
+                </div>
+              </div>
             </div>
           </div>
-        ))}
+        </div>
+      </div>
+
+      {/* Search and Filters */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="relative flex-1">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-[#00BFFF]" />
+              </div>
+              <input
+                type="text"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#00BFFF] focus:border-[#00BFFF] text-sm md:text-base"
+                placeholder="Search programs..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <button
+              onClick={() => setIsFilterVisible(!isFilterVisible)}
+              className="md:hidden bg-gray-100 px-4 py-2 rounded-lg text-[#00BFFF] hover:bg-gray-200 transition-colors"
+            >
+              Filters {isFilterVisible ? '↑' : '↓'}
+            </button>
+            <div className={`flex-col md:flex-row gap-4 ${isFilterVisible ? 'flex' : 'hidden md:flex'}`}>
+              <select
+                className="block w-full md:w-48 pl-3 pr-10 py-2 text-sm md:text-base border border-gray-300 focus:outline-none focus:ring-[#00BFFF] focus:border-[#00BFFF] rounded-lg"
+                value={selectedLevel}
+                onChange={(e) => setSelectedLevel(e.target.value)}
+              >
+                {levels.map(level => (
+                  <option key={level} value={level}>{level}</option>
+                ))}
+              </select>
+              <select
+                className="block w-full md:w-48 pl-3 pr-10 py-2 text-sm md:text-base border border-gray-300 focus:outline-none focus:ring-[#00BFFF] focus:border-[#00BFFF] rounded-lg"
+                value={selectedFaculty}
+                onChange={(e) => setSelectedFaculty(e.target.value)}
+              >
+                {faculties.map(faculty => (
+                  <option key={faculty} value={faculty}>{faculty}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Results Summary */}
+        <div className="mb-6 text-[#00BFFF] text-sm md:text-base">
+          Showing {filteredPrograms.length} programs
+          {selectedLevel !== 'All' && ` in ${selectedLevel}`}
+          {selectedFaculty !== 'All' && ` from ${selectedFaculty}`}
+        </div>
+
+        {/* Programs Grid */}
+        <div className="grid gap-4 md:gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-12">
+          {filteredPrograms.map((program, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+            >
+              <div className="p-4 md:p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs md:text-sm font-medium bg-[#00BFFF] text-white">
+                    {program.level}
+                  </span>
+                  <span className="text-xs md:text-sm text-[#00BFFF]">{program.faculty}</span>
+                </div>
+                <h3 className="text-base md:text-lg font-semibold text-[#00BFFF] mb-4 line-clamp-2 min-h-[48px] md:min-h-[56px]">{program.name}</h3>
+                <button
+                  onClick={() => setModalProgram(program)}
+                  className="inline-flex items-center justify-center w-full px-4 py-2 border border-[#00BFFF] rounded-lg text-[#00BFFF] hover:bg-[#00BFFF] hover:text-white transition-colors duration-300 text-sm md:text-base"
+                >
+                  View Details <ChevronRight className="h-4 w-4 ml-1" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Modal */}
       {modalProgram && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-2xl w-full p-6">
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">{modalProgram.name}</h2>
-                <p className="text-gray-600">{modalProgram.faculty}</p>
-              </div>
-              <button
-                onClick={() => setModalProgram(null)}
-                className="text-gray-400 hover:text-gray-500"
-              >
-                <span className="sr-only">Close</span>
-                <X className="h-6 w-6" />
-              </button>
+          <div className="bg-white rounded-xl max-w-2xl w-full p-4 md:p-6 relative max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setModalProgram(null)}
+              className="absolute top-4 right-4 text-[#00BFFF] hover:text-[#0099CC] focus:outline-none"
+            >
+              <X className="h-6 w-6" />
+            </button>
+            <div className="mb-6">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs md:text-sm font-medium bg-[#00BFFF] text-white mb-2">
+                {modalProgram.level}
+              </span>
+              <h2 className="text-xl md:text-2xl font-bold text-[#00BFFF] mb-2">{modalProgram.name}</h2>
+              <p className="text-[#00BFFF] text-sm md:text-base">{modalProgram.faculty}</p>
             </div>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <BookOpen className="h-5 w-5 text-blue-600" />
-                <span className="text-gray-700">{modalProgram.level}</span>
+            <div className="space-y-6">
+              <div className="flex items-center space-x-2 text-[#00BFFF]">
+                <BookOpen className="h-5 w-5" />
+                <span className="text-sm md:text-base">Duration: 3-4 years (Full-time)</span>
               </div>
               <div className="border-t pt-4">
-                <h3 className="font-semibold text-gray-900 mb-2">Program Overview</h3>
-                <p className="text-gray-600">
+                <h3 className="font-semibold text-[#00BFFF] mb-2 text-base md:text-lg">Program Overview</h3>
+                <p className="text-gray-600 text-sm md:text-base">
                   This program offers comprehensive education in {modalProgram.name.toLowerCase()}, 
-                  preparing students for successful careers in their chosen field.
+                  preparing students for successful careers in their chosen field. Our experienced faculty
+                  and state-of-the-art facilities ensure a high-quality learning experience.
+                </p>
+              </div>
+              <div className="border-t pt-4">
+                <h3 className="font-semibold text-[#00BFFF] mb-2 text-base md:text-lg">Career Opportunities</h3>
+                <p className="text-gray-600 text-sm md:text-base">
+                  Graduates of this program have excellent career prospects in various sectors, including
+                  research, industry, academia, and consultancy.
                 </p>
               </div>
               <div className="border-t pt-4">
@@ -222,9 +275,9 @@ const Programs = () => {
                     setModalProgram(null);
                     // Add application logic here
                   }}
-                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-300"
+                  className="w-full bg-[#00BFFF] text-white py-3 px-4 rounded-lg hover:bg-[#0099CC] transition-colors duration-300 flex items-center justify-center text-sm md:text-base"
                 >
-                  Apply Now
+                  Apply Now <ChevronRight className="h-4 w-4 ml-1" />
                 </button>
               </div>
             </div>
