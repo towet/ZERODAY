@@ -123,6 +123,8 @@ const Programs = () => {
   const handleProgramClick = (program: Program) => {
     if (program.name === "Bachelor of Law (LL.B)") {
       navigate('/law-program');
+    } else if (program.name === "Bachelor of Science in Applied Computer Science") {
+      navigate('/computer-science');
     } else {
       setModalProgram(program);
     }
