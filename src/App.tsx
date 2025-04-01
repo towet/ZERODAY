@@ -6,6 +6,7 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import CountUp from 'react-countup';
 import { useInView } from 'react-intersection-observer';
 import Programs from './components/Programs';
+import LawProgram from './components/LawProgram';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -147,7 +148,6 @@ function App() {
           </div>
         )}
         <Routes>
-          <Route path="/programs" element={<Programs />} />
           <Route path="/" element={
             <>
               {/* Hero Section */}
@@ -439,6 +439,8 @@ function App() {
               </button>
             </>
           } />
+          <Route path="/programs" element={<Programs />} />
+          <Route path="/law-program" element={<LawProgram />} />
         </Routes>
       </div>
     </Router>

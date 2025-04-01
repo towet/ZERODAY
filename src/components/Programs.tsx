@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Search, ChevronRight, BookOpen, X, GraduationCap, Users, Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface Program {
   level: string;
@@ -106,6 +107,7 @@ const Programs = () => {
   const [selectedFaculty, setSelectedFaculty] = useState('All');
   const [modalProgram, setModalProgram] = useState<Program | null>(null);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const navigate = useNavigate();
 
   const levels = ['All', ...Array.from(new Set(programs.map(p => p.level)))];
   const faculties = ['All', ...Array.from(new Set(programs.map(p => p.faculty)))];
@@ -117,6 +119,14 @@ const Programs = () => {
     const matchesFaculty = selectedFaculty === 'All' || program.faculty === selectedFaculty;
     return matchesSearch && matchesLevel && matchesFaculty;
   });
+
+  const handleProgramClick = (program: Program) => {
+    if (program.name === "Bachelor of Law (LL.B)") {
+      navigate('/law-program');
+    } else {
+      setModalProgram(program);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -221,7 +231,7 @@ const Programs = () => {
                 </div>
                 <h3 className="text-base md:text-lg font-semibold text-[#00BFFF] mb-4 line-clamp-2 min-h-[48px] md:min-h-[56px]">{program.name}</h3>
                 <button
-                  onClick={() => setModalProgram(program)}
+                  onClick={() => handleProgramClick(program)}
                   className="inline-flex items-center justify-center w-full px-4 py-2 border border-[#00BFFF] rounded-lg text-[#00BFFF] hover:bg-[#00BFFF] hover:text-white transition-colors duration-300 text-sm md:text-base"
                 >
                   View Details <ChevronRight className="h-4 w-4 ml-1" />
